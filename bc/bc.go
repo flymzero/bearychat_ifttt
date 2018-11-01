@@ -7,7 +7,7 @@ import (
 	bearychat "github.com/bearyinnovative/bearychat-go"
 )
 
-const BcToken = "880b2f6f5ad949689aa5fcca5a874f53"
+const BcToken = "f75c3e3a4cd04ce18cb8f14771eeefcb"
 const BcUrl = "https://api.bearychat.com/v1"
 
 func Run() {
