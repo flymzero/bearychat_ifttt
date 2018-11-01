@@ -14,14 +14,17 @@
 > **-h**    获取使用帮助
 
 > **-ls**   列出所有自己及自己设置对象的信息
+> 
  ![示例](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/721541038190_.pic.jpg)
 
 > **-s [-m]  n:昵称  k:ifttt上的key  [e:邮箱]**   设置自己或者对象的信息(n必填，-m则表示设置自己信息)
 - 例1 : -s -m n:我 k:xxxxxx  设置自己的昵称和ifttt的key
 - 例2 : -s n:老婆 k:oooooo e:xxx@gmail.com 设置一个对象：老婆及触发的key
+  
 ![示例](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/681541038185_.pic.jpg)
 > **-d 昵称**  删除你对象中对应昵称的这个对象
 - 例 : -d 老婆 把老婆这个对象删了
+  
   ![示例](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/671541038184_.pic.jpg)
 
 
@@ -38,8 +41,11 @@
 
 ## ifttt配置
 - 开通webhooks服务
+  
   ![示例](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/841541038268_.pic.jpg)
+
 - 获取ifttt的webhook的key
+  
   ![示例](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/881541038275_.pic.jpg)
 
 
@@ -64,6 +70,7 @@
 > 保存
 
 **通过bearychat触发操作**
+
 ![示例](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/741541038220_.pic.jpg)
 
 > 查看
@@ -80,3 +87,5 @@
 
 ![示例](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/731541038190_.pic.jpg)
 ![示例](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/701541038186_.pic.jpg)
+
+## 还有更多等你自己拓展
