@@ -8,9 +8,8 @@ import (
 )
 
 func main() {
-	// config.Users = map[string]config.BCObject{"key": config.BCObject{Nickname: "gg"}}
-	// config.WriteUsers("./config/users.json", config.Users)
-
+	// carsh with https://github.com/maxcnunes/gaper
+	// go get -u github.com/maxcnunes/gaper/cmd/gaper
 	// 获取用户储存数据
 	if err := config.ReadUsers("./config/users.json", &config.Users); err != nil {
 		os.Exit(1)

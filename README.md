@@ -1,5 +1,9 @@
 [bearychat_ifttt](https://github.com/flymzero/bearychat_ifttt) 使用帮助
 
+## 更新
+
+> 去除email数据绑定，一个对象只绑定**名称**和**key**，名称唯一
+
 ## 原理说明
 > 利用ifttt的webhooks服务通过**触发词**来执行你指定的操作（3个参数可提供）
 > 
@@ -7,9 +11,10 @@
 > 
 > ifttt获取key: [链接](http://maker.ifttt.com/)
 
-## 对象操作
+## 对象数据绑定操作
 
-把自己或者别人（统一称为对象）先设置对应的ifttt的key执行操作
+把自己或者别人（统一称为对象）先绑定对应的ifttt的key执行操作
+一个对象包含**名称**和**key**两个字段 （名称唯一）
 
 > **-h**    获取使用帮助
 
@@ -17,12 +22,12 @@
 > 
  ![示例](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/721541038190_.pic.jpg)
 
-> **-s [-m]  n:昵称  k:ifttt上的key  [e:邮箱]**   设置自己或者对象的信息(n必填，-m则表示设置自己信息)
-- 例1 : -s -m n:我 k:xxxxxx  设置自己的昵称和ifttt的key
-- 例2 : -s n:老婆 k:oooooo e:xxx@gmail.com 设置一个对象：老婆及触发的key
+> **-s [-m]  n:名称  k:ifttt上的key  **   设置自己或者对象的信息(n必填唯一，-m则表示设置自己信息)
+- 例1 : -s -m n:我 k:xxxxxx  设置自己的名称和ifttt的key
+- 例2 : -s n:老婆 k:oooooo 设置一个对象：老婆及触发的key
   
 ![示例](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/681541038185_.pic.jpg)
-> **-d 昵称**  删除你对象中对应昵称的这个对象
+> **-d 名称**  删除你对象中对应名称的这个对象
 - 例 : -d 老婆 把老婆这个对象删了
   
   ![示例](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/671541038184_.pic.jpg)
@@ -30,9 +35,9 @@
 
 ## 触发操作
 
-> **$触发词  [n:昵称]  [v1:xx]  [v2:xx]  [v3:xx] ** 
+> **$触发词  [n:名称]  [v1:xx]  [v2:xx]  [v3:xx] ** 
 > 
-对这个昵称对象(n不填就是自己，v1,v2,v3都是可选的)，进行触发操作,并传输可选的3个参数，~~当存在引用附件时以附件的url优先作为v3的值~~,贝洽的文件在未登录的情况下无法访问链接,所以无法转存!!!
+对这个名称对象(n不填就是自己，v1,v2,v3都是可选的)，进行触发操作,并传输可选的3个参数，~~当存在引用附件时以附件的url优先作为v3的值~~,贝洽的文件在未登录的情况下无法访问链接,所以无法转存!!!
 
 需在"对象"手机ifttt上创建对应的Applet
 

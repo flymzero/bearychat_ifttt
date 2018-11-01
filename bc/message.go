@@ -21,18 +21,27 @@ const (
 )
 
 const helpText = `[bearychat_ifttt](https://github.com/flymzero/bearychat_ifttt) 使用帮助
-**对象操作**
+
+**更新**
+
+> 去除email数据绑定，一个对象只绑定**名称**和**key**，名称唯一
+
+**对象数据绑定操作**
+
+把自己或者别人（统一称为对象）先绑定对应的ifttt的key执行操作
+一个对象包含**名称**和**key**两个字段 （名称唯一）
+
 > **-h**    获取使用帮助
-> **-ls**   列出所有自己及自己设置对象的信息
-> **-s [-m]  n:昵称  k:ifttt上的key  [e:邮箱]**   设置自己或者对象的信息(n必填，-m则表示设置自己信息)
-- 例1 : -s -m n:我 k:xxxxxx  设置自己的昵称和ifttt的key
-- 例2 : -s n:老婆 k:oooooo e:xxx@gmail.com 设置一个对象：老婆及触发的key
-> **-d 昵称**  删除你对象中对应昵称的这个对象
+> **-ls**   列出所有自己及自己设置对象的信息(名称&key)
+> **-s [-m]  n:名称  k:ifttt上的key **   设置自己或者对象的信息(n必填唯一，-m则表示设置自己信息)
+- 例1 : -s -m n:我 k:xxxxxx  设置自己的名称称和ifttt的key
+- 例2 : -s n:老婆 k:oooooo 设置一个对象：老婆及触发的key
+> **-d 名称**  删除你对象中对应名称的这个对象
 - 例 : -d 老婆 把老婆这个对象删了
 
 **触发操作 ifttt webhooks 触发词 + 任意服务**
-> **$触发词  [n:昵称]  [v1:xx]  [v2:xx]  [v3:xx] ** 
-对这个昵称对象(n不填就是自己，v1,v2,v3都是可选的)，进行触发操作,并传输可选的3个参数，~~当存在引用附件时以附件的url优先作为v3的值~~,贝洽的文件在未登录的情况下无法访问链接,所以无法转存!!!
+> **$触发词  [n:名称]  [v1:xx]  [v2:xx]  [v3:xx] ** 
+对这个名称对象(n不填就是自己，v1,v2,v3都是可选的)，进行触发操作,并传输可选的3个参数，~~当存在引用附件时以附件的url优先作为v3的值~~,贝洽的文件在未登录的情况下无法访问链接,所以无法转存!!!
 需在"对象"手机ifttt上创建对应的Applet
 
 **基本上ifttt上能创造的东西(通知,发邮件,文件转存,发微博....),你都可以让这个机器人代劳, 话说ifttt不开放共享applet也真是坑**
@@ -44,12 +53,12 @@ const cmdError = "❎ 命令不匹配"
 const keyNeedP2p = "设置命名中包含Ifttt的key，涉及加密信息，请私聊我添加"
 const NeedSetMeFirst = "❎ 设置命名必须先设置自己的信息才能添加其他对象 命令：**-s -m**"
 const SetNickNameError = "❎ 设置命名中**n:**没有数据"
-const SetNickNameOtherAgin = "❎ 你的对象中有相同昵称存在"
-const SetNickNameSelfAgin = "❎ 和你的自己的昵称一样"
-const DelNotExistError = "❎ 你对象中不存在这个昵称的对象(不能删除自己)"
+const SetNickNameOtherAgin = "❎ 你的对象中有相同名称存在"
+const SetNickNameSelfAgin = "❎ 和你的自己的名称一样"
+const DelNotExistError = "❎ 你对象中不存在这个名称的对象(不能删除自己)"
 const DoSelfKeyError = "❎ 请先设置自己的Ifttt的Key"
 const DoOtherKeyError = "❎ 请先设置该对象的Ifttt的Key"
-const DoOtherNotExist = "❎ 你对象中不存在这个昵称的对象"
+const DoOtherNotExist = "❎ 你对象中不存在这个名称的对象"
 
 // 查看是否需要处理
 func NeedManage(message bearychat.RTMMessage, uid string) bool {
@@ -163,10 +172,10 @@ func SendLsMessage(message bearychat.RTMMessage, context *bearychat.RTMContext) 
 	if !exist {
 		m["text"] = noUserInfo
 	} else {
-		infoText := "[自己]   昵称 : " + setLsStr("", userInfo.Nickname) + ",   key : " + setLsStr("iftttkey", userInfo.IftttKey) + ",   email : " + setLsStr("", userInfo.Email) + "\n"
+		infoText := "[自己]   名称 : " + setLsStr("", userInfo.Nickname) + ",   key : " + setLsStr("iftttkey", userInfo.IftttKey) + "\n"
 		if userInfo.Others != nil {
 			for _, value := range userInfo.Others {
-				tempText := "[对象]   昵称 : " + setLsStr("", value.Nickname) + ",   key : " + setLsStr("iftttkey", value.IftttKey) + ",   email : " + setLsStr("", value.Email) + "\n"
+				tempText := "[对象]   名称 : " + setLsStr("", value.Nickname) + ",   key : " + setLsStr("iftttkey", value.IftttKey) + "\n"
 				infoText += tempText
 			}
 		}
@@ -233,7 +242,6 @@ func SendSMessage(message bearychat.RTMMessage, context *bearychat.RTMContext) {
 		isSelf := false
 		nickname := ""
 		key := ""
-		email := ""
 		for _, value := range realTextArray[1:] {
 			if value == "-m" {
 				isSelf = true
@@ -250,8 +258,6 @@ func SendSMessage(message bearychat.RTMMessage, context *bearychat.RTMContext) {
 					// 	return
 					// }
 					key = value[2:]
-				} else if strings.HasPrefix(value, "e:") && len(value) > 2 {
-					email = value[2:]
 				}
 			}
 		}
@@ -263,7 +269,7 @@ func SendSMessage(message bearychat.RTMMessage, context *bearychat.RTMContext) {
 		} else if isSelf {
 			if len(nickname) > 0 {
 				userInfo.Nickname = nickname
-				//看昵称是否重名
+				//看名称是否重名
 				if userInfo.Others != nil {
 					for k, _ := range userInfo.Others {
 						if k == nickname {
@@ -279,18 +285,15 @@ func SendSMessage(message bearychat.RTMMessage, context *bearychat.RTMContext) {
 			if len(key) > 0 {
 				userInfo.IftttKey = key
 			}
-			if len(email) > 0 {
-				userInfo.Email = email
-			}
 			config.Users[message["uid"].(string)] = userInfo
 			config.WriteUsers("./config/users.json", config.Users)
-			infoText := "[自己]   昵称 : " + setLsStr("", userInfo.Nickname) + ",   key : " + setLsStr("iftttkey", userInfo.IftttKey) + ",   email : " + setLsStr("", userInfo.Email) + "\n"
+			infoText := "[自己]   名称 : " + setLsStr("", userInfo.Nickname) + ",   key : " + setLsStr("iftttkey", userInfo.IftttKey) + "\n"
 			m["text"] = "✅   " + infoText + "\n参赛期间可以看到key,方便测试"
 		} else {
 			if len(nickname) == 0 {
 				m["text"] = SetNickNameError
 			} else {
-				//看昵称是否重名
+				//看名称是否重名
 				if userInfo.Nickname == nickname {
 					m["text"] = SetNickNameSelfAgin
 					if err := context.Loop.Send(m); err != nil {
@@ -308,16 +311,13 @@ func SendSMessage(message bearychat.RTMMessage, context *bearychat.RTMContext) {
 				if len(key) > 0 {
 					otherInfo.IftttKey = key
 				}
-				if len(email) > 0 {
-					otherInfo.Email = email
-				}
 				if userInfo.Others == nil {
 					userInfo.Others = map[string]config.OtherObject{}
 				}
 				userInfo.Others[nickname] = otherInfo
 				config.Users[message["uid"].(string)] = userInfo
 				config.WriteUsers("./config/users.json", config.Users)
-				infoText := "[对象]   昵称 : " + setLsStr("", otherInfo.Nickname) + ",   key : " + setLsStr("iftttkey", otherInfo.IftttKey) + ",   email : " + setLsStr("", otherInfo.Email) + "\n"
+				infoText := "[对象]   名称 : " + setLsStr("", otherInfo.Nickname) + ",   key : " + setLsStr("iftttkey", otherInfo.IftttKey) + "\n"
 				m["text"] = "✅   " + infoText + "\n参赛期间可以看到key,方便测试"
 			}
 		}
@@ -352,7 +352,6 @@ func SendDoMessage(message bearychat.RTMMessage, context *bearychat.RTMContext) 
 		trigger := realTextArray[0][1:]
 		nickname := ""
 		key := ""
-		// email := ""
 		v1 := ""
 		v2 := ""
 		v3 := ""
@@ -415,15 +414,26 @@ func SendDoMessage(message bearychat.RTMMessage, context *bearychat.RTMContext) 
 			}
 		}
 		//判断是否有引用
-		// if refer_key, exist := message["refer_key"]; exist {
-		// 	referKey := refer_key.(string)
-		// 	//获取 引用的具体内容
+		if refer_key, exist := message["refer_key"]; exist {
+			if refer_key != nil {
+				// fmt.Println(message)
+				referKey := refer_key.(string)
+				//获取 引用的具体内容
+				referMessage, err := GetMessageInfo(message["vchannel_id"].(string), referKey)
+				if err != nil {
+					m["text"] = "❎ 获取引用消息错误 : " + err.Error()
+					if err := context.Loop.Send(m); err != nil {
+						fmt.Println(err.Error())
+					}
+					return
+				}
+				fmt.Println(referMessage)
+			}
 
-		// }
-		m["text"] = nickname + " " + " " + key + " " + v1 + " " + v2 + " " + v3 + " " + trigger
+		}
 		//ifttt 请求
 		if err := config.IftttPost(trigger, key, v1, v2, v3); err != nil {
-			m["text"] = "❎ Ifttt 请求错误 :" + err.Error()
+			m["text"] = "❎ Ifttt 请求错误 : " + err.Error()
 			if err := context.Loop.Send(m); err != nil {
 				fmt.Println(err.Error())
 			}

@@ -1,17 +1,22 @@
 package bc
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
+	"strconv"
 
 	bearychat "github.com/bearyinnovative/bearychat-go"
 )
 
-const BcToken = "f75c3e3a4cd04ce18cb8f14771eeefcb"
-const BcUrl = "https://api.bearychat.com/v1"
+const bcToken = "f75c3e3a4cd04ce18cb8f14771eeefcb"
+const bcUrl = "https://api.bearychat.com/v1"
 
 func Run() {
-	context, err := bearychat.NewRTMContext(BcToken)
+	context, err := bearychat.NewRTMContext(bcToken)
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -73,4 +78,33 @@ func Run() {
 			}
 		}
 	}
+}
+
+func GetMessageInfo(vchannel_id, message_key string) (map[string]interface{}, error) {
+	url := bcUrl + "/message.info?token=" + bcToken + "&vchannel_id=" + vchannel_id + "&message_key=" + message_key
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, err
+	}
+	var referMessage map[string]interface{}
+	err = json.Unmarshal(body, &referMessage)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, err
+	}
+	if code, exist := referMessage["code"]; exist {
+		if err, exist1 := referMessage["error"]; exist1 {
+			return nil, errors.New(err.(string))
+		} else {
+			return nil, errors.New("code : " + strconv.Itoa(code.(int)))
+		}
+	}
+	return referMessage, nil
 }
