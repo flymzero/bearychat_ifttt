@@ -18,7 +18,7 @@ func Run() {
 
 	// http客户端
 	BcClient = openapi.NewClient(bcToken)
-	//
+	// Rtm
 	context, err := bearychat.NewRTMContext(bcToken)
 	if err != nil {
 		log.Fatal(err)
@@ -96,55 +96,28 @@ func NewRefer(m, oldM bearychat.RTMMessage) bearychat.RTMMessage {
 	return m
 }
 
-// func GetAttachmentTextOrFileRealUrl(orgMessage []byte) (v3 string) {
-// 	v3 = ""
-// 	// fmt.Println(string(orgMessage))
-// 	var msg bearychat.UpdateAttachments
-// 	err := json.Unmarshal(orgMessage, &msg)
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 		return v3
-// 	}
-// 	fmt.Println(msg)
-// 	if len(msg.Data.Attachments) == 0 {
-// 		fmt.Println(errors.New("没有附件内容"))
-// 		return v3
-// 	}
-// 	v3 = msg.Data.Attachments[0].Text
-// 	if msg.Data.Attachments[0].File == nil {
-// 		fmt.Println(errors.New("没有附件内容"))
-// 		return
-// 	}
-// 	fileKey := msg.Data.Attachments[0].File.Key
-// 	v3 = bcUrl + "/file.location?file_key=" + fileKey + "&token=" + bcToken
-// 	return v3
-// }
-
-// func GetMessageInfo(vchannel_id, message_key string) (map[string]interface{}, error) {
-// 	url := bcUrl + "/message.info?token=" + bcToken + "&vchannel_id=" + vchannel_id + "&message_key=" + message_key
-// 	resp, err := http.Get(url)
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 		return nil, err
-// 	}
-// 	defer resp.Body.Close()
-// 	body, err := ioutil.ReadAll(resp.Body)
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 		return nil, err
-// 	}
-// 	var referMessage map[string]interface{}
-// 	err = json.Unmarshal(body, &referMessage)
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 		return nil, err
-// 	}
-// 	if code, exist := referMessage["code"]; exist {
-// 		if err, exist1 := referMessage["error"]; exist1 {
-// 			return nil, errors.New(err.(string))
-// 		} else {
-// 			return nil, errors.New("code : " + strconv.Itoa(code.(int)))
-// 		}
-// 	}
-// 	return referMessage, nil
-// }
+func GetRealFileUrl(message bearychat.RTMMessage) (string, error) {
+	v3 := ""
+	referKey := message["refer_key"].(string)
+	messageInfoOptions := &openapi.MessageInfoOptions{
+		VChannelID: message["vchannel_id"].(string),
+		Key:        openapi.MessageKey(referKey),
+	}
+	referMessage, _, err := BcClient.Message.Info(Ctx(), messageInfoOptions)
+	if err != nil {
+		fmt.Println(err.Error())
+		return v3, err
+	}
+	//
+	if referMessage.Text != nil {
+		v3 = *(referMessage.Text)
+	}
+	if referMessage.File != nil {
+		if referMessage.File.Key != nil {
+			fileKey := string(*(referMessage.File.Key))
+			fileUrl := BcClient.BaseURL.String() + "file.location?file_key=" + fileKey + "&token=" + bcToken
+			return fileUrl, nil
+		}
+	}
+	return v3, nil
+}

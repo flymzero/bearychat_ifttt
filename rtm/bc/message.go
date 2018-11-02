@@ -413,46 +413,24 @@ func SendDoMessage(message bearychat.RTMMessage, context *bearychat.RTMContext) 
 				}
 			}
 		}
-		//判断是否有引用
-		// if refer_key, exist := message["refer_key"]; exist {
-		// 	if refer_key != nil {
-		// 		fmt.Println("🆒🆒🆒  \n", string(message["org"].([]byte)))
-		// 		if orgMessage, exist := message["org"]; exist {
-		// 			if orgByte, ok := orgMessage.([]byte); ok {
-		// 				v3Str := GetAttachmentTextOrFileRealUrl(orgByte)
-		// 				if len(v3Str) > 0 {
-		// 					v3 = v3Str
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// }
-		// if message.Type() == "update_attachments" {
 
-		// }
-		fmt.Println(v3)
-		// if refer_key, exist := message["refer_key"]; exist {
-		// 	if refer_key != nil {
-		// 		// fmt.Println(message)
-		// 		referKey := refer_key.(string)
-		// 		referMessage, _, _ := BcClient.Message.Info(Ctx(), &openapi.MessageInfoOptions{VChannelID: message["vchannel_id"].(string), Key: openapi.MessageKey(referKey)})
-		// 		k := string(*(referMessage.File.Key))
-		// 		rr := "https://api.bearychat.com/v1/file.location?file_key=" + k + "&token=" + "f75c3e3a4cd04ce18cb8f14771eeefcb"
-		// 		fmt.Println(rr)
-		// 		v3 = "https://storage.bearychat.com/FsHM7I8PTRn07T1Q-JsLcGZJmpBx?{}&e=1541163896&token=bbdM74CLuWzsgblM-J_FvC6N06iZVRNR7StZcXKG:zm94tDjtpDqhwf2tpIHW0fQ9KLA=" //rr
-		// 		//获取 引用的具体内容
-		// 		// referMessage, err := GetMessageInfo(message["vchannel_id"].(string), referKey)
-		// 		// if err != nil {
-		// 		// 	m["text"] = "❎ 获取引用消息错误 : " + err.Error()
-		// 		// 	if err := context.Loop.Send(m); err != nil {
-		// 		// 		fmt.Println(err.Error())
-		// 		// 	}
-		// 		// 	return
-		// 		// }
-		// 		// fmt.Println(referMessage)
-		// 	}
-
-		// }
+		// 判断是否有引用
+		if refer_key, exist := message["refer_key"]; exist {
+			if refer_key != nil {
+				fileUrl, err := GetRealFileUrl(message)
+				if err != nil {
+					m["text"] = "❎ 获取引用消息错误 : " + err.Error()
+					if err := context.Loop.Send(m); err != nil {
+						fmt.Println(err.Error())
+					}
+					return
+				}
+				if len(fileUrl) > 0 {
+					v3 = fileUrl
+				}
+				fmt.Println(v3)
+			}
+		}
 		//ifttt 请求
 		if err := config.IftttPost(trigger, key, v1, v2, v3); err != nil {
 			m["text"] = "❎ Ifttt 请求错误 : " + err.Error()
