@@ -31,6 +31,7 @@ const helpText = `
 > ifttt获取key: [链接](http://maker.ifttt.com/)
 
 **更新**
+> 🌝🌝🌝 更新个骚操作示例视频 ： https://www.bilibili.com/video/av35209812/
 > 增加反向webhook,触发ifttt服务 > ifttt的webhooks > 机器人 > 具体内容到通知倍洽用户
 > 正向webhook,增加引用消息附件功能
 > 去除email数据绑定，一个对象只绑定**名称**和**key**，名称唯一
