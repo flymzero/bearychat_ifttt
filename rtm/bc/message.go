@@ -20,7 +20,8 @@ const (
 	DoType   MessageType = "$"   //触发操作
 )
 
-const helpText = `[bearychat_ifttt](https://github.com/flymzero/bearychat_ifttt) 使用帮助
+const helpText = `![tu]()
+[bearychat_ifttt](https://github.com/flymzero/bearychat_ifttt) 使用帮助
 
 **更新**
 
