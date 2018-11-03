@@ -1,12 +1,22 @@
-[bearychat_ifttt](https://github.com/flymzero/bearychat_ifttt) 使用帮助
+![](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/i2bc.png)
+
+[bearychat_ifttt](https://www.v2ex.com/t/503333#reply1) 使用帮助
+
+## 原理说明
+> ```正向webhook``` : 通过机器人命令 > ifttt的webhooks > 触发服务
+> 
+> ```反向webhook``` : 触发ifttt服务 > ifttt的webhooks > 机器人 > 具体内容到通知倍洽用户
+---
 
 ## 更新
 
+> 增加反向webhook,触发ifttt服务 > ifttt的webhooks > 机器人 > 具体内容到通知倍洽用户
+> 
+> 正向webhook,增加引用消息附件功能
+> 
 > 去除email数据绑定，一个对象只绑定**名称**和**key**，名称唯一
 
-## 原理说明
-> 利用ifttt的webhooks服务通过**触发词**来执行你指定的操作（3个参数可提供）
-> 
+## 相关链接
 > ifttt相关文章: [链接](https://sspai.com/post/39243?utm_source=weibo&utm_medium=sspai&utm_campaign=weibo&utm_content=ifttt&utm_term=jiaocheng)
 > 
 > ifttt获取key: [链接](http://maker.ifttt.com/)
@@ -33,7 +43,7 @@
   ![示例](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/671541038184_.pic.jpg)
 
 
-## 触发操作
+## 正向webhook触发操作
 
 > **$触发词  [n:名称]  [v1:xx]  [v2:xx]  [v3:xx] ** 
 > 
@@ -43,6 +53,20 @@
 
 **基本上ifttt上能创造的东西(通知,发邮件,文件转存,发微博....),你都可以让这个机器人代劳, 话说ifttt不开放共享applet也真是坑**
 
+## 反向webhook触发操作
+
+> 选择需要的触发服务
+
+> 填入 webhook 发送地址
+> 
+```
+ip : http://116.85.36.47:1024  (暂时使用)
+method : post
+Content Type : text/plain     
+Body: 倍恰用户名 内容               
+注:body中用户名和内容用空格分隔
+```
+> 指定服务触发 > 发送请求到 > 机器人 > 具体内容到通知倍洽用户
 
 ## ifttt配置
 - 开通webhooks服务

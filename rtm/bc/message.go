@@ -20,15 +20,21 @@ const (
 	DoType   MessageType = "$"   //触发操作
 )
 
-const helpText = `![](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/i2b.png)
-> 具体使用教程 : [链接](https://www.v2ex.com/t/503333#reply1)
+const helpText = `
+![](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/i2bc.png)
+---
+正向webhook : 通过机器人命令 > ifttt的webhooks > 触发服务
+反向webhook : 触发ifttt服务 > ifttt的webhooks > 机器人 > 具体内容到通知倍洽用户
+---
+> 具体使用教程 : https://www.v2ex.com/t/503333#reply1
 > ifttt相关文章: [链接](https://sspai.com/post/39243?utm_source=weibo&utm_medium=sspai&utm_campaign=weibo&utm_content=ifttt&utm_term=jiaocheng)
 > ifttt获取key: [链接](http://maker.ifttt.com/)
 
 **更新**
-> 增加反向webhook,触发ifttt服务>机器人>具体内容到通知倍洽用户
-> 正向webhook,可以引用消息附件
+> 增加反向webhook,触发ifttt服务 > ifttt的webhooks > 机器人 > 具体内容到通知倍洽用户
+> 正向webhook,增加引用消息附件功能
 > 去除email数据绑定，一个对象只绑定**名称**和**key**，名称唯一
+---
 `
 
 const noUserInfo = "没有关于您的用户信息请先设置 命令：**-s**"
