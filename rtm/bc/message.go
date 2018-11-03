@@ -26,7 +26,7 @@ const helpText = `
 正向webhook : 通过机器人命令 > ifttt的webhooks > 触发服务
 反向webhook : 触发ifttt服务 > ifttt的webhooks > 机器人 > 具体内容到通知倍洽用户
 ---
-> 具体使用教程 : https://www.v2ex.com/t/503333#reply1
+> 具体使用教程 : https://github.com/flymzero/bearychat_ifttt.git
 > ifttt相关文章: [链接](https://sspai.com/post/39243?utm_source=weibo&utm_medium=sspai&utm_campaign=weibo&utm_content=ifttt&utm_term=jiaocheng)
 > ifttt获取key: [链接](http://maker.ifttt.com/)
 

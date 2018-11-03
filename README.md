@@ -1,6 +1,6 @@
 ![](https://raw.githubusercontent.com/flymzero/bearychat_ifttt/master/imgs/i2bc.png)
 
-[bearychat_ifttt](https://www.v2ex.com/t/503333#reply1) 使用帮助
+[bearychat_ifttt](https://github.com/flymzero/bearychat_ifttt.git) 使用帮助
 
 ## 原理说明
 > ```正向webhook``` : 通过机器人命令 > ifttt的webhooks > 触发服务
